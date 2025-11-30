@@ -1,19 +1,28 @@
+import 'dart:convert';
+
 class ChatPartModel {
   final String text;
 
-  ChatPartModel({required this.text});
+  ChatPartModel({
+    required this.text,
+  });
 
-  factory ChatPartModel.fromJson(Map<String, dynamic> json) {
-    return ChatPartModel(
-      text: json['text'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toMap() {
     return {
       'text': text,
     };
   }
+
+  factory ChatPartModel.fromMap(Map<String, dynamic> map) {
+    return ChatPartModel(
+      text: map['text'] ?? '',
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ChatPartModel.fromJson(String source) =>
+      ChatPartModel.fromMap(json.decode(source));
 }
 
 class ChatMessageModel {
@@ -25,19 +34,24 @@ class ChatMessageModel {
     required this.parts,
   });
 
-  factory ChatMessageModel.fromJson(Map<String, dynamic> json) {
+  Map<String, dynamic> toMap() {
+    return {
+      'role': role,
+      'parts': parts.map((x) => x.toMap()).toList(),
+    };
+  }
+
+  factory ChatMessageModel.fromMap(Map<String, dynamic> map) {
     return ChatMessageModel(
-      role: json['role'],
-      parts: (json['parts'] as List<dynamic>)
-          .map((e) => ChatPartModel.fromJson(e))
-          .toList(),
+      role: map['role'] ?? '',
+      parts: List<ChatPartModel>.from(
+        (map['parts'] as List<dynamic>?)?.map((x) => ChatPartModel.fromMap(x)) ?? [],
+      ),
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'role': role,
-      'parts': parts.map((e) => e.toJson()).toList(),
-    };
-  }
+  String toJson() => json.encode(toMap());
+
+  factory ChatMessageModel.fromJson(String source) =>
+      ChatMessageModel.fromMap(json.decode(source));
 }
