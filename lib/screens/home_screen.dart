@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text("DEV BOT",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24,color: Colors.white),),
+              children: [Text("DEV BOT",style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24,fontFamily: 'SixtyFour',color: Colors.white),),
                 IconButton(onPressed: (){}, icon: Icon(Icons.image_search_outlined,color: Colors.white),)
               ]
             ),
