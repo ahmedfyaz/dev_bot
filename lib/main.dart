@@ -10,10 +10,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme:ThemeData(
         brightness: Brightness.dark,
         scaffoldBackgroundColor: Colors.grey.shade900,
-        primaryColor: Colors.deepPurple.shade300
+        primaryColor: Colors.purple.shade900
       ),
       home: Scaffold(
         body: HomeScreen(
