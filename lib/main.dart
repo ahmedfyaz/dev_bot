@@ -17,10 +17,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.purple.shade900
       ),
 
-      home: Scaffold(
-        body: HomeScreen(
-        ),
-      ),
+      home:HomeScreen()
     );
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/model/chat_message_model.dart';
+import 'package:chat_app/repos/chat_repo.dart';
 import 'package:meta/meta.dart';
 
 part 'dev_event.dart';
@@ -15,9 +16,14 @@ class DevBloc extends Bloc<DevEvent, DevState> {
   FutureOr<void> chatGenerateNewTextMessageEvent(
     ChatGenerateNewTextMessageEvent event,
     Emitter<DevState> emit,
-  ) {
-    messages.add(ChatMessageModel(role: "user", parts: [
-      ChatPartModel(text: event.inputMessage)
-    ]));
+  ) async{
+    messages.add(
+      ChatMessageModel(
+        role: "user",
+        parts: [ChatPartModel(text: event.inputMessage)],
+      ),
+    );
+    emit(ChatSuccessState(messages: messages));
+    await ChatRepo.chatTextGenrationRepo(messages);
   }
 }
