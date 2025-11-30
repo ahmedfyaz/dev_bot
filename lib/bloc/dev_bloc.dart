@@ -12,11 +12,13 @@ class DevBloc extends Bloc<DevEvent, DevState> {
   DevBloc() : super(DevInitial()) {
     on<ChatGenerateNewTextMessageEvent>(chatGenerateNewTextMessageEvent);
   }
+
   List<ChatMessageModel> messages = [];
+
   FutureOr<void> chatGenerateNewTextMessageEvent(
     ChatGenerateNewTextMessageEvent event,
     Emitter<DevState> emit,
-  ) async{
+  ) async {
     messages.add(
       ChatMessageModel(
         role: "user",
@@ -24,6 +26,21 @@ class DevBloc extends Bloc<DevEvent, DevState> {
       ),
     );
     emit(ChatSuccessState(messages: messages));
-    await ChatRepo.chatTextGenrationRepo(messages);
+    emit(ChatGenerationLoadingState());
+
+    try {
+      final generatedMessage = await ChatRepo.chatTextGenerationRepo(messages);
+      if (generatedMessage.isNotEmpty) {
+        messages.add(
+          ChatMessageModel(
+            role: 'model',
+            parts: [ChatPartModel(text: generatedMessage)],
+          ),
+        );
+        emit(ChatSuccessState(messages: messages));
+      }
+    } catch (e) {
+      emit(ChatGenerationErrorState(error: e.toString()));
+    }
   }
 }
